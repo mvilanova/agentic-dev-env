@@ -116,7 +116,13 @@ herdr integration install pi
 ```
 
 See [`ai-tools/README.md`](ai-tools/README.md#herdr) for what each one
-sets up.
+sets up. Optionally, also add herdr's
+[agent skill](ai-tools/README.md#agent-skill) for reusable
+herdr-awareness inside the agent itself:
+
+```sh
+npx skills add herdrdev/herdr --skill herdr -g
+```
 
 ## 7. Agent harnesses (CLI/TUI coding agents)
 

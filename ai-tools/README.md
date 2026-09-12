@@ -62,6 +62,26 @@ per harness:
 None of the installed integration files are vendored in this repo since
 `herdr integration install` overwrites them on reinstall/update.
 
+### Agent skill
+
+https://herdr.dev/docs/agent-skill/ — a reusable skill (herdr-awareness:
+querying/controlling other panes, session state, etc.) that any agent
+supporting the skill system can load, on top of the `SessionStart`
+integration above.
+
+```sh
+npx skills add herdrdev/herdr --skill herdr -g
+```
+
+- `-g` installs it globally (available to every project); drop it for a
+  project-local install instead.
+- Requires herdr already installed and the agent running inside a
+  herdr-managed pane (`HERDR_ENV=1` set) to actually do anything at
+  runtime.
+- Fallback if `npx skills` doesn't fit your setup: copy the skill file
+  from the `herdrdev/herdr` GitHub repo directly into the agent's own
+  instructions/skills mechanism.
+
 ## TODO
 
 - [ ] Document Codex CLI / Pi config once customized (currently defaults)
