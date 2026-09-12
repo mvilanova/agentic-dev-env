@@ -153,6 +153,18 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 See [`claude-code/`](claude-code/) for Claude Code config, and
 [`ai-tools/README.md`](ai-tools/README.md) for Codex CLI and Pi.
 
+## 8. Hunk (diff review)
+
+https://www.hunk.dev/ — review-first terminal diff viewer for
+agent-authored changesets.
+
+```sh
+brew install hunk
+```
+
+See [`ai-tools/README.md`](ai-tools/README.md#hunk) for other install
+methods and usage notes.
+
 ## Next
 
 Continue with [`shell/README.md`](shell/README.md) for the rest of the

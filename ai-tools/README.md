@@ -91,8 +91,31 @@ Codex only has the `SessionStart` hook integration above, not the skill.
   from the `herdrdev/herdr` GitHub repo directly into the agent's own
   instructions/skills mechanism.
 
+## Hunk
+
+https://www.hunk.dev/ — review-first terminal diff viewer for
+agent-authored changesets. Works as a pager, difftool, or standalone
+reviewer with Git, Jujutsu, and Sapling; renders agent-left annotations
+(summary/rationale) inline above the hunk they refer to, and supports
+custom TypeScript extensions.
+
+```sh
+brew install hunk
+```
+
+Other install methods (no brew, or want the latest before it's bottled):
+
+```sh
+curl -fsSL https://hunk.dev/install.sh | sh   # curl
+npm i -g hunkdiff                              # npm
+mise use -g hunk                               # mise
+nix run github:modem-dev/hunk                  # Nix
+```
+
 ## TODO
 
 - [ ] Document Codex CLI / Pi config once customized (currently defaults)
 - [ ] Document Cursor setup (present on this machine, not yet written up)
 - [ ] Document shared MCP servers, if any
+- [ ] Decide whether to actually configure hunk as git pager/difftool, or
+      leave it available but unconfigured
