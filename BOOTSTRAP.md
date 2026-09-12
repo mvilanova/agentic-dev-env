@@ -4,8 +4,9 @@ Order of operations when setting up a new machine, before getting into
 tool-specific config (Claude Code, other AI tools, etc.).
 
 Preference: install via **Homebrew** wherever a formula/cask exists. Fall
-back to the tool's own installer (curl script, npm) only when it has no
-brew option.
+back to the tool's own installer (curl script, npm) when it has no brew
+option, or (Claude Code specifically — see step 7) when brew's version
+lags too far behind.
 
 ## 0. Homebrew
 
@@ -115,8 +116,8 @@ LLM with a tool-use loop (read/write/edit files, run shell commands) so it
 can act on a codebase directly.
 
 ```sh
-# Claude Code (Anthropic) — brew cask
-brew install --cask claude-code
+# Claude Code (Anthropic) — native installer, NOT the brew cask (see note)
+curl -fsSL https://claude.ai/install.sh | bash
 
 # Codex CLI (OpenAI) — brew cask
 brew install --cask codex
@@ -125,13 +126,14 @@ brew install --cask codex
 npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 ```
 
-> Note: Anthropic's own docs point to a native curl installer
-> (`curl -fsSL https://claude.ai/install.sh | bash`) as the primary
-> supported method, which auto-updates itself independently of brew. On
-> this machine that installer ran *in addition to* the brew cask, leaving
-> two copies (`~/.local/bin/claude`, ahead on PATH, vs. the brew-installed
-> one) — worth reconciling to just the brew cask for a single, predictable
-> update path.
+> Note: Claude Code is the one exception to "prefer brew" in this repo.
+> Homebrew's `claude-code` cask lags noticeably behind Anthropic's native
+> installer (checked 2026-09-12: brew had 2.1.236 vs. native's 2.1.269,
+> even right after `brew update`), and the native installer auto-updates
+> itself in the background — which is what Anthropic's own docs recommend
+> as primary. This machine previously had both installed at once (brew
+> cask + native, native winning on PATH); the brew cask was removed to
+> avoid the duplicate.
 
 See [`claude-code/`](claude-code/) for Claude Code config, and
 [`ai-tools/README.md`](ai-tools/README.md) for Codex CLI and Pi.
