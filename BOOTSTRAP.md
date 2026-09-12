@@ -69,6 +69,26 @@ https://herdr.dev/
 Installed after the terminal + shell basics are in place, before
 Claude Code config. See [`ai-tools/README.md`](ai-tools/README.md#herdr).
 
+## 6. Agent harnesses (CLI/TUI coding agents)
+
+Claude Code, Codex CLI, and Pi — each is a CLI/TUI program that wraps an
+LLM with a tool-use loop (read/write/edit files, run shell commands) so it
+can act on a codebase directly.
+
+```sh
+# Claude Code (Anthropic)
+npm install -g @anthropic-ai/claude-code
+
+# Codex CLI (OpenAI)
+npm install -g @openai/codex
+
+# Pi (provider-agnostic, Earendil Works)
+npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+```
+
+See [`claude-code/`](claude-code/) for Claude Code config, and
+[`ai-tools/README.md`](ai-tools/README.md) for Codex CLI and Pi.
+
 ## Next
 
 Continue with [`shell/README.md`](shell/README.md) for the rest of the
