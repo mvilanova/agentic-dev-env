@@ -78,6 +78,15 @@ npx skills add herdrdev/herdr --skill herdr -g
 - Requires herdr already installed and the agent running inside a
   herdr-managed pane (`HERDR_ENV=1` set) to actually do anything at
   runtime.
+
+Confirmed on this machine: the global install writes the actual skill
+once to `~/.agents/skills/herdr` and symlinks it into each detected
+harness's own skills dir — `~/.claude/skills/herdr`,
+`~/.pi/agent/skills/herdr`, `~/.openclaw/skills/herdr`. It did **not**
+symlink into `~/.codex/skills/`, even though Codex CLI is installed —
+Codex's skill discovery apparently isn't picked up by this installer, so
+Codex only has the `SessionStart` hook integration above, not the skill.
+
 - Fallback if `npx skills` doesn't fit your setup: copy the skill file
   from the `herdrdev/herdr` GitHub repo directly into the agent's own
   instructions/skills mechanism.
