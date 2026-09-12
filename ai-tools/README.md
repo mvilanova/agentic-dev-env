@@ -34,19 +34,33 @@ brew install herdr
 ```
 
 Installed after the terminal + shell setup, before diving into
-per-harness config. Herdr installs its own integration hook into every
-agent harness it finds — same pattern each time: a `SessionStart` hook
-(`herdr-agent-state.sh`) that reports session state back to herdr over a
-local socket (`HERDR_SOCKET_PATH`, `HERDR_PANE_ID`):
+per-harness config. After `brew install herdr`, run its integration
+installer for each harness in use:
 
-- Claude Code: `~/.claude/settings.json` → see
+```sh
+herdr integration install claude
+herdr integration install codex
+herdr integration install pi
+```
+
+Each reports session state back to herdr over a local socket
+(`HERDR_SOCKET_PATH`, `HERDR_PANE_ID`), but the mechanism differs slightly
+per harness:
+
+- **Claude Code**: installs a `SessionStart` hook script to
+  `~/.claude/hooks/herdr-agent-state.sh` and wires it into
+  `~/.claude/settings.json` → see
   [`../claude-code/README.md`](../claude-code/README.md#hooks)
-- Codex CLI: `~/.codex/hooks.json`
-- Cursor: `~/.cursor/hooks.json` (Cursor itself isn't otherwise documented
-  here yet — see TODO)
+- **Codex CLI**: installs `~/.codex/herdr-agent-state.sh` and wires it via
+  `~/.codex/hooks.json`, also touching `~/.codex/config.toml`
+- **Pi**: installs a TypeScript extension to
+  `~/.pi/agent/extensions/herdr-agent-state.ts` (not a hooks.json — Pi's
+  extension mechanism is different from the other two)
+- **Cursor**: `~/.cursor/hooks.json` (Cursor itself isn't otherwise
+  documented here yet — see TODO)
 
-None of the `herdr-agent-state.sh` scripts are vendored in this repo since
-herdr overwrites them on reinstall/update.
+None of the installed integration files are vendored in this repo since
+`herdr integration install` overwrites them on reinstall/update.
 
 ## TODO
 

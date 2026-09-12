@@ -106,8 +106,17 @@ brew install herdr
 ```
 
 Installed after the terminal + shell basics are in place, before the
-agent harnesses below — it installs its own integration hooks into each
-one. See [`ai-tools/README.md`](ai-tools/README.md#herdr).
+agent harnesses below. After installing the harnesses in step 7, run
+herdr's integration installer for each one:
+
+```sh
+herdr integration install claude
+herdr integration install codex
+herdr integration install pi
+```
+
+See [`ai-tools/README.md`](ai-tools/README.md#herdr) for what each one
+sets up.
 
 ## 7. Agent harnesses (CLI/TUI coding agents)
 
