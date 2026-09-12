@@ -150,8 +150,9 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 > cask + native, native winning on PATH); the brew cask was removed to
 > avoid the duplicate.
 
-See [`claude-code/`](claude-code/) for Claude Code config, and
-[`ai-tools/README.md`](ai-tools/README.md) for Codex CLI and Pi.
+See [`ai-tools/README.md`](ai-tools/README.md#agent-harnesses) for all
+three, and [`ai-tools/claude-code/`](ai-tools/claude-code/) for Claude
+Code's settings file specifically.
 
 ## 8. Hunk (diff review)
 
@@ -168,5 +169,4 @@ methods and usage notes.
 ## Next
 
 Continue with [`shell/README.md`](shell/README.md) for the rest of the
-shell setup (nvm, pnpm, aliases), then [`claude-code/`](claude-code/) and
-[`ai-tools/`](ai-tools/).
+shell setup (nvm, pnpm, aliases), then [`ai-tools/`](ai-tools/).

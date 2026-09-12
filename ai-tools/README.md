@@ -1,13 +1,23 @@
-# Other AI Tools
+# AI Tools
 
-Setup notes for AI/agent tools other than Claude Code itself, and any
-shared integrations.
+Setup notes for the AI coding tools in use and their shared integrations.
 
 ## Agent harnesses
 
-Alongside Claude Code, these are the other agent harnesses in
-rotation — CLI/TUI programs that wrap an LLM with a tool-use loop
-(read/write/edit files, run shell commands):
+The agent harnesses in rotation — CLI/TUI programs that wrap an LLM with
+a tool-use loop (read/write/edit files, run shell commands). None is the
+centerpiece; they're interchangeable peers:
+
+### Claude Code (Anthropic)
+
+Native installer, not the brew cask (see
+[`../BOOTSTRAP.md`](../BOOTSTRAP.md) step 7 for why):
+
+```sh
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+Settings file and notes: [`claude-code/`](claude-code/).
 
 ### Codex CLI (OpenAI)
 
@@ -50,7 +60,7 @@ per harness:
 - **Claude Code**: installs a `SessionStart` hook script to
   `~/.claude/hooks/herdr-agent-state.sh` and wires it into
   `~/.claude/settings.json` → see
-  [`../claude-code/README.md`](../claude-code/README.md#hooks)
+  [`claude-code/README.md`](claude-code/README.md#hooks)
 - **Codex CLI**: installs `~/.codex/herdr-agent-state.sh` and wires it via
   `~/.codex/hooks.json`, also touching `~/.codex/config.toml`
 - **Pi**: installs a TypeScript extension to

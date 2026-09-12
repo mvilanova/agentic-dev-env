@@ -6,7 +6,7 @@ redacted copy plus notes.
 ## Setup
 
 1. Install Claude Code via the native installer, **not** the brew cask
-   (see [`../BOOTSTRAP.md`](../BOOTSTRAP.md) step 7 for why — brew's
+   (see [`../../BOOTSTRAP.md`](../../BOOTSTRAP.md) step 7 for why — brew's
    `claude-code` cask lags behind):
    ```sh
    curl -fsSL https://claude.ai/install.sh | bash
