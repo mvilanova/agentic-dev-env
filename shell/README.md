@@ -5,13 +5,11 @@ Zsh, managed with [Oh My Zsh](https://ohmyz.sh/), plus
 
 ## Setup
 
-1. Install Oh My Zsh, then plugins: `git autojump brew colored-man-pages
-   history macos pip python zsh-syntax-highlighting` (autojump and
-   zsh-syntax-highlighting via `brew install autojump zsh-syntax-highlighting`).
-2. Install Starship: `brew install starship`.
-3. Install [nvm](https://github.com/nvm-sh/nvm) and
+1. Install Oh My Zsh + plugins and Starship — see
+   [`../BOOTSTRAP.md`](../BOOTSTRAP.md) steps 1 and 4.
+2. Install [nvm](https://github.com/nvm-sh/nvm) and
    [pnpm](https://pnpm.io/) (standalone install).
-4. Copy `.zshrc.example` to `~/.zshrc` and `.profile.example` to
+3. Copy `.zshrc.example` to `~/.zshrc` and `.profile.example` to
    `~/.profile`, filling in any placeholders (e.g. `GH_TOKEN`).
 
 ## Notable config

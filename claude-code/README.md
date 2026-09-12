@@ -5,7 +5,10 @@ redacted copy plus notes.
 
 ## Setup
 
-1. Install Claude Code: https://claude.com/claude-code
+1. Install Claude Code: `brew install --cask claude-code` (see
+   [`../BOOTSTRAP.md`](../BOOTSTRAP.md) step 7 — brew is preferred here
+   over Anthropic's native curl installer, to keep updates going through
+   brew).
 2. Copy `settings.example.json` to `~/.claude/settings.json`, replacing
    placeholder paths (e.g. `<path-to-hooks>`) with real ones.
 3. Restart Claude Code to pick up settings changes.

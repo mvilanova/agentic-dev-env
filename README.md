@@ -7,10 +7,13 @@ Goal: if I get a new machine, this repo is enough to rebuild the setup.
 
 ## Contents
 
-- [`BOOTSTRAP.md`](BOOTSTRAP.md) — first steps on a new machine (Oh My Zsh,
-  Nerd Fonts, Starship)
+- [`BOOTSTRAP.md`](BOOTSTRAP.md) — first steps on a new machine, in order
+  (Homebrew, Oh My Zsh, Vim, Nerd Fonts, Starship, terminal, herdr, agent
+  harnesses)
 - [`claude-code/`](claude-code/) — Claude Code settings, hooks, and skills
 - [`shell/`](shell/) — shell (zsh/bash) config and aliases
+- [`vim/`](vim/) — Vim config and plugins
+- [`git/`](git/) — git and GitHub CLI config
 - [`terminal/`](terminal/) — terminal emulator setup
 - [`ai-tools/`](ai-tools/) — other AI coding tools and how they're configured
 
