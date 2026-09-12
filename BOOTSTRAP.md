@@ -15,6 +15,12 @@ Enable plugins in `~/.zshrc`:
 plugins=(git autojump brew colored-man-pages history macos pip python)
 ```
 
+Install `autojump` itself via brew (the plugin just wraps it):
+
+```sh
+brew install autojump
+```
+
 > Note: `shell/.zshrc.example` in this repo also adds
 > `zsh-syntax-highlighting` (`brew install zsh-syntax-highlighting`,
 > sourced manually — it's not an Oh My Zsh bundled plugin).
