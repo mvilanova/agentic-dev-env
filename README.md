@@ -7,6 +7,8 @@ Goal: if I get a new machine, this repo is enough to rebuild the setup.
 
 ## Contents
 
+- [`BOOTSTRAP.md`](BOOTSTRAP.md) — first steps on a new machine (Oh My Zsh,
+  Nerd Fonts, Starship)
 - [`claude-code/`](claude-code/) — Claude Code settings, hooks, and skills
 - [`shell/`](shell/) — shell (zsh/bash) config and aliases
 - [`terminal/`](terminal/) — terminal emulator setup
