@@ -1,0 +1,124 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+
+# Path to your Oh My Zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+ZSH_THEME=""
+
+# Which plugins would you like to load?
+plugins=(git autojump brew colored-man-pages history macos pip python zsh-syntax-highlighting)
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# Development
+alias zshconfig="vim ~/.zshrc"
+alias ohmyzsh="vim ~/.oh-my-zsh"
+
+alias gbd="git branch -D"
+alias gdh="git diff head"
+alias gdm="git diff main"
+alias gfp='gcam "fix" && ggpush'
+alias ghco="gh pr checkout"
+alias ghmr="gh pr merge -s -d --auto"
+
+# Create a PR (gh pr create --fill) and request a Copilot review on it
+ghpr() {
+  local pr_url
+  pr_url=$(gh pr create --fill "$@") || return $?
+  echo "$pr_url"
+
+  local pr_number
+  pr_number=$(echo "$pr_url" | grep -oE '[0-9]+$')
+  local repo
+  repo=$(gh repo view --json nameWithOwner -q '.nameWithOwner')
+
+  gh api "repos/${repo}/pulls/${pr_number}/requested_reviewers" \
+    --method POST \
+    --field 'reviewers[]=copilot-pull-request-reviewer[bot]' --silent \
+    && echo "Copilot review requested for PR #${pr_number}"
+}
+
+# Request a Copilot review on the PR for the current branch
+ghcopilot() {
+  local repo
+  repo=$(gh repo view --json nameWithOwner -q '.nameWithOwner') || {
+    echo "⚠ Could not detect repository"
+    return 1
+  }
+
+  local pr_number
+  pr_number=$(gh pr view --json number -q '.number' 2>/dev/null) || {
+    echo "⚠ No pull request found for the current branch"
+    return 1
+  }
+
+  gh api "repos/${repo}/pulls/${pr_number}/requested_reviewers" \
+    --method POST \
+    --field 'reviewers[]=copilot-pull-request-reviewer[bot]' --silent \
+    && echo "✓ Copilot review requested for PR #${pr_number}" \
+    || echo "⚠ Failed to request Copilot review for PR #${pr_number}"
+}
+
+alias gmbd='git branch --merged | egrep -v "(^\*|main|master)" | xargs git branch -d'
+alias grall="git restore ."
+alias gup="git fetch origin && git rebase origin/main && ggpush"
+
+# Brew
+bubo="brew update && brew outdated"
+bup="brew upgrade"
+bubu="bubo && bup"
+
+# Github
+## Set a personal access token here (do NOT commit the real value).
+## Prefer `gh auth login` over a hardcoded token when possible.
+# export GH_TOKEN="<your-token-here>"
+
+. "$HOME/.local/bin/env"
+
+# Autojump
+[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Auto-switch Node when a directory has an .nvmrc (nvm docs' zsh recipe)
+autoload -U add-zsh-hook
+
+load-nvmrc() {
+  local nvmrc_path
+  nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version
+    nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
+      nvm use
+    fi
+  elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
+
+# Starship
+eval "$(starship init zsh)"
+
+# pnpm
+export PNPM_HOME="$HOME/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end

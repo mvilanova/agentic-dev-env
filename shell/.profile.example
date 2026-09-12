@@ -1,0 +1,14 @@
+
+. "$HOME/.local/bin/env"
+
+# pnpm (standalone install). Also needed by this machine's git hooks: pre-commit
+# runs them via `bash -lc`, which reads this file and never reads ~/.zshrc.
+export PNPM_HOME="$HOME/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+
+# nvm — the frontend hooks (eslint, vitest, vite) need node on PATH too.
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
