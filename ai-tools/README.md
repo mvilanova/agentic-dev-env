@@ -112,6 +112,10 @@ mise use -g hunk                               # mise
 nix run github:modem-dev/hunk                  # Nix
 ```
 
+Option, not yet decided: configure hunk as the git pager and difftool
+(`git config --global core.pager hunk` / `git config --global diff.tool
+hunk`), instead of just having it available to invoke manually.
+
 ## TODO
 
 - [ ] Document Codex CLI / Pi config once customized (currently defaults)
