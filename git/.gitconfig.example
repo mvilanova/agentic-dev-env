@@ -1,8 +1,7 @@
 # This is Git's per-user configuration file.
 [user]
-# Please adapt and uncomment the following lines:
-#	name = Tempo AI
-#	email = tempoai@Tempos-MacBook-Pro.local
+	name = Marc Vilanova
+	email = marc.vilanova@gmail.com
 [credential "https://github.com"]
 	helper = 
 	helper = !/opt/homebrew/bin/gh auth git-credential

@@ -3,8 +3,8 @@
 ## Setup
 
 1. `gh auth login` (GitHub CLI authentication — no token files to manage).
-2. Copy `.gitconfig.example` to `~/.gitconfig`, uncomment and fill in
-   `[user] name` / `email`.
+2. Copy `.gitconfig.example` to `~/.gitconfig` (already has `[user] name` /
+   `email` filled in — adjust if this isn't you).
 3. Copy `gitignore_global.example` to `~/.config/git/ignore` (git's global
    excludes file).
 4. Copy `gh-config.yml.example` to `~/.config/gh/config.yml`.
@@ -20,9 +20,3 @@
   accidentally committed.
 - **`gh` alias**: `co` → `pr checkout`.
 
-## Note
-
-The real `.gitconfig` on this machine has `user.name` / `user.email`
-commented out — i.e. no git identity is set globally. Repos either set it
-per-project or inherit `user.name`/`email` from elsewhere. Worth setting
-explicitly if that's not intentional.
