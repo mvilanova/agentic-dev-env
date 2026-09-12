@@ -58,6 +58,17 @@ The generated config is checked in at
 `~/.config/starship.toml` instead of regenerating the preset, unless you
 want to start from a different Starship preset.
 
+## 4. Terminal
+
+Set up iTerm2 and/or Ghostty — see [`terminal/README.md`](terminal/README.md).
+
+## 5. Herdr (agent runtime)
+
+https://herdr.dev/
+
+Installed after the terminal + shell basics are in place, before
+Claude Code config. See [`ai-tools/README.md`](ai-tools/README.md#herdr).
+
 ## Next
 
 Continue with [`shell/README.md`](shell/README.md) for the rest of the
