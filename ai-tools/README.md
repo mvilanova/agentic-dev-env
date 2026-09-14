@@ -101,6 +101,37 @@ Codex only has the `SessionStart` hook integration above, not the skill.
   from the `herdrdev/herdr` GitHub repo directly into the agent's own
   instructions/skills mechanism.
 
+### reviewr plugin
+
+https://github.com/persiyanov/herdr-reviewr — a code-review pane beside
+the agent: read its diff (uncommitted / branch / last turn / commits),
+comment on lines, and send the comments back to the agent's input. Never
+edits the worktree. Requires herdr ≥ 0.7.5.
+
+```sh
+herdr plugin install persiyanov/herdr-reviewr
+```
+
+To update, reinstall (config is keyed by plugin id and survives):
+
+```sh
+herdr plugin uninstall persiyanov.reviewr && herdr plugin install persiyanov/herdr-reviewr
+```
+
+It auto-opens when herdr creates a workspace for a git worktree. To
+toggle it with `cmd+r`, add this to `~/.config/herdr/config.toml` (then
+`herdr server reload-config` if herdr is already running):
+
+```toml
+[[keys.command]]
+key = "cmd+r"
+type = "plugin_action"
+command = "persiyanov.reviewr.toggle"
+```
+
+Or without a keybinding:
+`herdr plugin action invoke toggle --plugin persiyanov.reviewr`.
+
 ## Hunk
 
 https://www.hunk.dev/ — review-first terminal diff viewer for
