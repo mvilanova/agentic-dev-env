@@ -126,6 +126,16 @@ Option, not yet decided: configure hunk as the git pager and difftool
 (`git config --global core.pager hunk` / `git config --global diff.tool
 hunk`), instead of just having it available to invoke manually.
 
+herdr keybinding: add this to `~/.config/herdr/config.toml` to toggle the
+`persiyanov.reviewr` plugin with `cmd+r`:
+
+```toml
+[[keys.command]]
+key = "cmd+r"
+type = "plugin_action"
+command = "persiyanov.reviewr.toggle"
+```
+
 ## TODO
 
 - [ ] Document Codex CLI / Pi config once customized (currently defaults)
