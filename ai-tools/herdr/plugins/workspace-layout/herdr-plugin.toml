@@ -1,0 +1,16 @@
+id = "devenv.layout"
+name = "Workspace Layout"
+version = "0.1.0"
+min_herdr_version = "0.7.0"
+description = "Give every new workspace the standard panes: a Claude Code pane and a shell."
+platforms = ["macos", "linux"]
+
+[[events]]
+on = "workspace.created"
+command = ["python3", "layout.py"]
+
+[[actions]]
+id = "apply"
+title = "Apply standard layout"
+contexts = ["workspace", "pane"]
+command = ["python3", "layout.py"]

@@ -101,6 +101,48 @@ Codex only has the `SessionStart` hook integration above, not the skill.
   from the `herdrdev/herdr` GitHub repo directly into the agent's own
   instructions/skills mechanism.
 
+### Workspace layout
+
+Existing workspaces survive on their own: herdr keeps tabs, panes, and
+cwds in `~/.config/herdr/session.json`, and `session.resume_agents_on_restore`
+(on by default) brings Claude conversations back after a server restart.
+New workspaces are the gap — they open as a single shell pane.
+
+There is no layout template in `config.toml`; herdr has no config keys
+for layouts at all. Layout automation is a plugin concern, so this repo
+ships one in [`herdr/plugins/workspace-layout/`](herdr/plugins/workspace-layout/)
+(`devenv.layout`). It hooks the `workspace.created` event and gives each
+new workspace the standard two panes: Claude Code in the original pane,
+and a plain shell split to the right in the same cwd.
+
+```sh
+herdr plugin link ~/Projects/agentic-dev-env/ai-tools/herdr/plugins/workspace-layout
+```
+
+`link` registers the directory in place rather than copying it, so edits
+to `layout.py` take effect on the next workspace — this repo stays the
+source of truth. Use `herdr plugin unlink devenv.layout` to stop it.
+
+It leaves a workspace alone when the workspace already has more than one
+pane (a restored session, or the layout ran already) or when the cwd is
+not inside a git repo. Defaults are overridable in
+`$(herdr plugin config-dir devenv.layout)/config.json`:
+
+```json
+{"agent": "claude", "require_git": true, "ratio": 0.5, "shell_label": "shell"}
+```
+
+`"agent": null` lays out the panes without starting an agent. The same
+layout can be applied by hand to a one-pane workspace with
+`herdr plugin action invoke apply --plugin devenv.layout`, and
+`herdr plugin log list --plugin devenv.layout` shows what each run did.
+
+Other event names available to hooks like this one, from
+`herdr api schema --json`: `workspace.created`/`closed`,
+`tab.created`/`closed`, `pane.created`/`closed`,
+`pane.agent_status_changed`, `pane.scroll_changed`, and
+`worktree.created`/`opened`/`removed`.
+
 ### reviewr plugin
 
 https://github.com/persiyanov/herdr-reviewr — a code-review pane beside
