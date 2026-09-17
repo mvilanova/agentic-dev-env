@@ -157,6 +157,36 @@ Option, not yet decided: configure hunk as the git pager and difftool
 (`git config --global core.pager hunk` / `git config --global diff.tool
 hunk`), instead of just having it available to invoke manually.
 
+### herdr plugin
+
+https://github.com/edmundmiller/herdr-plugin-hunk — opens a hunk diff in
+a herdr split pane or tab, so a diff can be pulled up next to the agent
+without leaving herdr. Needs herdr ≥ 0.7.0, `python3`, and `hunk` on
+`PATH`.
+
+```sh
+herdr plugin install edmundmiller/herdr-plugin-hunk
+```
+
+Actions are `hunk.diff.<scope>-<split|tab>`, with `<scope>` one of
+`worktree`, `staged`, `branch`. Keybinding in
+`~/.config/herdr/config.toml` (then `herdr server reload-config` if herdr
+is already running):
+
+```toml
+[[keys.command]]
+key = "prefix+shift+h"
+type = "plugin_action"
+command = "hunk.diff.worktree-split"
+```
+
+`HUNK_THEME` (e.g. `catppuccin-mocha`) overrides the theme the plugin
+passes to hunk.
+
+Overlaps with herdr's [reviewr plugin](#reviewr-plugin) — reviewr is a
+persistent review pane with line comments that go back to the agent,
+this is a quick one-off diff view.
+
 ## TODO
 
 - [ ] Document Codex CLI / Pi config once customized (currently defaults)
