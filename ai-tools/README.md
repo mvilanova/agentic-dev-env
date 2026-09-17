@@ -157,7 +157,7 @@ Option, not yet decided: configure hunk as the git pager and difftool
 (`git config --global core.pager hunk` / `git config --global diff.tool
 hunk`), instead of just having it available to invoke manually.
 
-### herdr plugin
+### herdr plugin: on demand
 
 https://github.com/edmundmiller/herdr-plugin-hunk — opens a hunk diff in
 a herdr split pane or tab, so a diff can be pulled up next to the agent
@@ -183,9 +183,37 @@ command = "hunk.diff.worktree-split"
 `HUNK_THEME` (e.g. `catppuccin-mocha`) overrides the theme the plugin
 passes to hunk.
 
-Overlaps with herdr's [reviewr plugin](#reviewr-plugin) — reviewr is a
-persistent review pane with line comments that go back to the agent,
-this is a quick one-off diff view.
+### herdr plugin: automatic
+
+https://github.com/scott306lr/herdr-plugin-hunk-autodiff — the same idea
+without the keypress: when an agent in a pane goes idle with a dirty
+working tree, it splits that pane to the right (unfocused, labelled
+`hunk`) running `hunk diff --watch`. Installed here.
+
+```sh
+herdr plugin install scott306lr/herdr-plugin-hunk-autodiff
+```
+
+No actions and no keybindings — it hooks the
+`pane.agent_status_changed` event instead. It stays quiet when a hunk
+session is already live for the repo, or when the diff hasn't changed
+since a pane was last opened for it, so closing the pane keeps it closed
+until the next change. Requirements are the same as the on-demand plugin
+above, plus a harness reporting agent state to herdr (`herdr integration
+install claude`, as set up in the [Herdr](#herdr) section).
+
+Both hunk plugins can be installed at once — they are the manual and
+automatic halves of the same tool, and neither is aware of the other.
+
+### Choosing between the review panes
+
+Three plugins here open a pane; they differ in what triggers them:
+
+| Plugin | Opens | Scope |
+| --- | --- | --- |
+| [reviewr](#reviewr-plugin) | on workspace create, persistent | uncommitted / branch / last turn / commits, with line comments back to the agent |
+| [hunk on demand](#herdr-plugin-on-demand) | on keypress | worktree / staged / branch, read-only |
+| [hunk autodiff](#herdr-plugin-automatic) | when the agent goes idle | uncommitted, read-only |
 
 ## TODO
 
