@@ -8,6 +8,21 @@ The agent harnesses in rotation — CLI/TUI programs that wrap an LLM with
 a tool-use loop (read/write/edit files, run shell commands). None is the
 centerpiece; they're interchangeable peers:
 
+### ripgrep (shared prerequisite)
+
+All three harnesses search files with `rg` when it's on PATH and fall
+back to `find`/`grep` when it isn't. The fallback works but is slower
+and less accurate (no `.gitignore` awareness), so install ripgrep before
+the harnesses:
+
+```sh
+brew install ripgrep
+```
+
+Claude Code bundles its own `rg` and shims it into the shells it spawns,
+so it works without this step — Codex CLI and Pi do not, and this
+machine had no real `rg` binary until it was installed via brew.
+
 ### Claude Code (Anthropic)
 
 Native installer, not the brew cask (see

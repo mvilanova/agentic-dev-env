@@ -130,6 +130,13 @@ Claude Code, Codex CLI, and Pi — each is a CLI/TUI program that wraps an
 LLM with a tool-use loop (read/write/edit files, run shell commands) so it
 can act on a codebase directly.
 
+Install ripgrep first — the harnesses' file-search tools use `rg` and
+silently fall back to slower `find`/`grep` when it's missing:
+
+```sh
+brew install ripgrep
+```
+
 ```sh
 # Claude Code (Anthropic) — native installer, NOT the brew cask (see note)
 curl -fsSL https://claude.ai/install.sh | bash
