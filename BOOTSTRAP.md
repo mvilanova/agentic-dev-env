@@ -182,6 +182,30 @@ and uninstalling Homebrew casks.
 brew install --cask caskhub
 ```
 
+## 10. direnv (per-project environments)
+
+https://direnv.net/ — loads and unloads env vars per directory from an
+`.envrc` file. Used here to auto-activate a project's Python venv on `cd`.
+
+```sh
+brew install direnv
+```
+
+Then add the hook at the end of `~/.zshrc` (already in
+`shell/.zshrc.example`) and copy the quiet-logging config:
+
+```sh
+eval "$(direnv hook zsh)"
+```
+
+```sh
+mkdir -p ~/.config/direnv
+cp shell/direnv.toml ~/.config/direnv/direnv.toml
+```
+
+See [`shell/README.md`](shell/README.md#direnv-python-venvs) for the
+per-project `.envrc` setup.
+
 ## Next
 
 Continue with [`shell/README.md`](shell/README.md) for the rest of the

@@ -1,0 +1,6 @@
+[global]
+# Hide the "export +VIRTUAL_ENV ..." diff line
+hide_env_diff = true
+# log_filter is an allow-list; "^$" matches nothing, so "loading ..." is hidden.
+# Errors (e.g. a blocked .envrc) are always shown.
+log_filter = "^$"

@@ -122,3 +122,6 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
+
+# direnv (per-project env, e.g. Python venvs via .envrc)
+eval "$(direnv hook zsh)"
