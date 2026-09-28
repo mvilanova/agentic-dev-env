@@ -9,7 +9,7 @@ Goal: if I get a new machine, this repo is enough to rebuild the setup.
 
 - [`BOOTSTRAP.md`](BOOTSTRAP.md) — first steps on a new machine, in order
   (Homebrew, Oh My Zsh, Vim, Nerd Fonts, Starship, terminal, herdr, agent
-  harnesses)
+  harnesses, hunk, CaskHub)
 - [`shell/`](shell/) — shell (zsh/bash) config and aliases
 - [`vim/`](vim/) — Vim config and plugins
 - [`git/`](git/) — git and GitHub CLI config
