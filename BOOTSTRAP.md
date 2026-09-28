@@ -173,6 +173,15 @@ brew install hunk
 See [`ai-tools/README.md`](ai-tools/README.md#hunk) for other install
 methods and usage notes.
 
+## 9. CaskHub (Homebrew app manager)
+
+https://caskhub.app/ — native Mac app for browsing, installing, updating,
+and uninstalling Homebrew casks.
+
+```sh
+brew install --cask caskhub
+```
+
 ## Next
 
 Continue with [`shell/README.md`](shell/README.md) for the rest of the
