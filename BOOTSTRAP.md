@@ -161,6 +161,11 @@ See [`ai-tools/README.md`](ai-tools/README.md#agent-harnesses) for all
 three, and [`ai-tools/claude-code/`](ai-tools/claude-code/) for Claude
 Code's settings file specifically.
 
+After installing the harnesses, install the
+[Ponytail plugin](ai-tools/README.md#ponytail) for Claude Code, Codex, and
+Pi. Follow the per-harness commands there, including the Node.js
+prerequisite and Codex hook setup.
+
 ## 8. Hunk (diff review)
 
 https://www.hunk.dev/ — review-first terminal diff viewer for

@@ -50,6 +50,59 @@ brew cask available; install via npm:
 npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 ```
 
+## Ponytail
+
+[Ponytail](https://github.com/DietrichGebert/ponytail#install) — shared
+coding guidance that favors existing code, standard libraries, and the
+smallest working solution.
+
+Install after the agent harnesses. Claude Code and Codex use Node.js
+lifecycle hooks: `node` must be on the non-interactive shell's `PATH`.
+If using nvm, see [`../shell/README.md`](../shell/README.md#setup)
+for setup. Without Node, the skills still work but automatic activation
+does not.
+
+### Claude Code
+
+Send these as **two separate prompts** inside Claude Code:
+
+```text
+/plugin marketplace add DietrichGebert/ponytail
+```
+
+```text
+/plugin install ponytail@ponytail
+```
+
+The same commands work in the Claude Code desktop app's Code tab.
+
+### Codex
+
+Run in the terminal:
+
+```sh
+codex plugin marketplace add DietrichGebert/ponytail
+codex plugin add ponytail@ponytail
+```
+
+Then run `codex`, open `/hooks`, review and trust Ponytail's two lifecycle
+hooks, and start a new thread. Restart the Codex desktop app to pick up
+the same installation.
+
+### Pi
+
+```sh
+pi install git:github.com/DietrichGebert/ponytail
+```
+
+### Usage
+
+The default mode is `full`. Use `/ponytail lite`, `/ponytail full`, or
+`/ponytail ultra` to change intensity; say `stop ponytail` or `normal mode`
+to turn it off for the conversation. See the
+[upstream commands](https://github.com/DietrichGebert/ponytail#commands)
+for review, audit, and other skills.
+
 ## Herdr
 
 https://herdr.dev/ — agent runtime / terminal-session manager.
