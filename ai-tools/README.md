@@ -58,9 +58,11 @@ smallest working solution.
 
 Install after the agent harnesses. Claude Code and Codex use Node.js
 lifecycle hooks: `node` must be on the non-interactive shell's `PATH`.
-If using nvm, see [`../shell/README.md`](../shell/README.md#setup)
-for setup. Without Node, the skills still work but automatic activation
-does not.
+If using nvm, complete [`../shell/README.md`](../shell/README.md#setup)
+step 4 to install and select Node.js LTS, and pass both version checks
+before running the plugin commands below. Installing nvm alone does not
+install Node.js. Without Node, the skills still work but automatic
+activation does not.
 
 ### Claude Code
 
