@@ -11,7 +11,22 @@ Zsh, managed with [Oh My Zsh](https://ohmyz.sh/), plus
    [pnpm](https://pnpm.io/) (standalone install).
 3. Copy `.zshrc.example` to `~/.zshrc` and `.profile.example` to
    `~/.profile`, filling in any placeholders (e.g. `GH_TOKEN`).
-4. Install direnv and copy `direnv.toml` to
+4. Load nvm, install the latest Node.js LTS release, and select it as the
+   default for new shells:
+
+   ```sh
+   export NVM_DIR="$HOME/.nvm"
+   . "$NVM_DIR/nvm.sh"
+   nvm install --lts
+   nvm alias default 'lts/*'
+   nvm use default
+   node --version
+   bash -lc 'node --version'
+   ```
+
+   Both version checks must succeed before installing agent plugins;
+   the second also checks Node availability in a non-interactive login shell.
+5. Install direnv and copy `direnv.toml` to
    `~/.config/direnv/direnv.toml` — see
    [`../BOOTSTRAP.md`](../BOOTSTRAP.md) step 10.
 
