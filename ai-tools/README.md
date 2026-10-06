@@ -171,37 +171,6 @@ Codex only has the `SessionStart` hook integration above, not the skill.
   from the `herdrdev/herdr` GitHub repo directly into the agent's own
   instructions/skills mechanism.
 
-### reviewr plugin
-
-https://github.com/persiyanov/herdr-reviewr — a code-review pane beside
-the agent: read its diff (uncommitted / branch / last turn / commits),
-comment on lines, and send the comments back to the agent's input. Never
-edits the worktree. Requires herdr ≥ 0.7.5.
-
-```sh
-herdr plugin install persiyanov/herdr-reviewr
-```
-
-To update, reinstall (config is keyed by plugin id and survives):
-
-```sh
-herdr plugin uninstall persiyanov.reviewr && herdr plugin install persiyanov/herdr-reviewr
-```
-
-It auto-opens when herdr creates a workspace for a git worktree. To
-toggle it with `cmd+r`, add this to `~/.config/herdr/config.toml` (then
-`herdr server reload-config` if herdr is already running):
-
-```toml
-[[keys.command]]
-key = "cmd+r"
-type = "plugin_action"
-command = "persiyanov.reviewr.toggle"
-```
-
-Or without a keybinding:
-`herdr plugin action invoke toggle --plugin persiyanov.reviewr`.
-
 ## Hunk
 
 https://www.hunk.dev/ — review-first terminal diff viewer for
@@ -227,63 +196,100 @@ Option, not yet decided: configure hunk as the git pager and difftool
 (`git config --global core.pager hunk` / `git config --global diff.tool
 hunk`), instead of just having it available to invoke manually.
 
-### herdr plugin: on demand
+### herdr plugin: automatic review and feedback (current)
 
-https://github.com/edmundmiller/herdr-plugin-hunk — opens a hunk diff in
-a herdr split pane or tab, so a diff can be pulled up next to the agent
-without leaving herdr. Needs herdr ≥ 0.7.0, `python3`, and `hunk` on
-`PATH`.
+[herdr-hunk-diff](https://github.com/jhochenbaum/herdr-hunk-diff) opens a
+Hunk review when an agent becomes idle, keeps it fresh with watch mode,
+and submits inline comments back to that agent. Requires Herdr ≥ 0.8.0
+and Node ≥ 22.12.
+
+The upstream plugin defaults to a right-hand split. Our
+[`hunk-horizontal.patch`](hunk-horizontal.patch) changes its shared opener
+to split **down**, in the agent's existing tab, without stealing focus.
+The patch includes a regression check. Use a linked local checkout so an
+upstream reinstall does not overwrite it.
+
+From this repository's root:
 
 ```sh
-herdr plugin install edmundmiller/herdr-plugin-hunk
+git clone https://github.com/jhochenbaum/herdr-hunk-diff.git ai-tools/.local/herdr-hunk-diff
+git -C ai-tools/.local/herdr-hunk-diff checkout 47146a058858b4a7a116992aaae643436d80e7ab
+git -C ai-tools/.local/herdr-hunk-diff apply "$PWD/ai-tools/hunk-horizontal.patch"
+npm --prefix ai-tools/.local/herdr-hunk-diff ci --ignore-scripts
+npm --prefix ai-tools/.local/herdr-hunk-diff run build
+npm --prefix ai-tools/.local/herdr-hunk-diff prune --omit=dev --ignore-scripts
+herdr plugin link "$PWD/ai-tools/.local/herdr-hunk-diff" --disabled
 ```
 
-Actions are `hunk.diff.<scope>-<split|tab>`, with `<scope>` one of
-`worktree`, `staged`, `branch`. Keybinding in
-`~/.config/herdr/config.toml` (then `herdr server reload-config` if herdr
-is already running):
+Create `config.toml` in the directory returned by
+`herdr plugin config-dir jhochenbaum.hunkdiff`:
+
+```toml
+[review]
+auto_open = true
+on_states = ["idle"]
+reuse_pane = true
+default_target = "auto"
+watch = true
+placement = "split"
+
+[roundtrip]
+clear_after_send = true
+```
+
+Replace the existing review shortcut in `~/.config/herdr/config.toml`
+and add the send shortcut:
 
 ```toml
 [[keys.command]]
 key = "prefix+shift+h"
 type = "plugin_action"
-command = "hunk.diff.worktree-split"
+command = "jhochenbaum.hunkdiff.review"
+
+[[keys.command]]
+key = "prefix+shift+s"
+type = "plugin_action"
+command = "jhochenbaum.hunkdiff.send-review"
 ```
 
-`HUNK_THEME` (e.g. `catppuccin-mocha`) overrides the theme the plugin
-passes to hunk.
-
-### herdr plugin: automatic
-
-https://github.com/scott306lr/herdr-plugin-hunk-autodiff — the same idea
-without the keypress: when an agent in a pane goes idle with a dirty
-working tree, it splits that pane to the right (unfocused, labelled
-`hunk`) running `hunk diff --watch`. Installed here.
+Activate the workflow:
 
 ```sh
-herdr plugin install scott306lr/herdr-plugin-hunk-autodiff
+herdr plugin enable jhochenbaum.hunkdiff
+herdr config check
+herdr server reload-config
 ```
 
-No actions and no keybindings — it hooks the
-`pane.agent_status_changed` event instead. It stays quiet when a hunk
-session is already live for the repo, or when the diff hasn't changed
-since a pane was last opened for it, so closing the pane keeps it closed
-until the next change. Requirements are the same as the on-demand plugin
-above, plus a harness reporting agent state to herdr (`herdr integration
-install claude`, as set up in the [Herdr](#herdr) section).
+Review opens automatically below the agent when it finishes. Use
+`prefix+shift+h` (`Ctrl+B`, then `Shift+H` with Herdr's default prefix) to
+open or refresh it manually. In Hunk, press `c` on a diff line to write
+a comment and `Ctrl+S` to save it. Press `prefix+shift+s` (`Ctrl+B`, then
+`Shift+S`) to submit the saved comments as the agent's next prompt.
+Successful delivery clears the submitted comments; a failed submission
+keeps them for retry.
 
-Both hunk plugins can be installed at once — they are the manual and
-automatic halves of the same tool, and neither is aware of the other.
+The plugin associates one agent and one review pane with each worktree.
+If agents share a checkout, send from the intended agent's pane to choose
+the recipient; separate worktrees keep reviews independent.
 
-### Choosing between the review panes
+`ai-tools/.local/herdr-hunk-diff` is the active plugin installation, not a
+temporary build directory. Herdr loads its compiled code and bundled Hunk
+from there, so keep it while linked. The `.gitignore` entry excludes it
+from version control. Development dependencies are pruned after building;
+the compiled code and runtime dependencies remain.
 
-Three plugins here open a pane; they differ in what triggers them:
+To update, reinstall dependencies with `npm ci --ignore-scripts`, reapply
+the patch to the updated checkout, rebuild, prune development dependencies,
+and relink. Do not use `herdr plugin install` to update this linked copy.
 
-| Plugin | Opens | Scope |
-| --- | --- | --- |
-| [reviewr](#reviewr-plugin) | on workspace create, persistent | uncommitted / branch / last turn / commits, with line comments back to the agent |
-| [hunk on demand](#herdr-plugin-on-demand) | on keypress | worktree / staged / branch, read-only |
-| [hunk autodiff](#herdr-plugin-automatic) | when the agent goes idle | uncommitted, read-only |
+The plugin pins Hunk 0.22.0. The standalone Homebrew installation is 0.23.0;
+those builds cannot share the same running session daemon. Use the plugin's
+bundled Hunk for this workflow until their versions are aligned.
+
+The previous `hunk.diff`, `hunk.autodiff`, and `persiyanov.reviewr` plugins
+have been uninstalled. Their installation instructions and shortcuts are
+removed from this guide. Keep Herdr's agent integrations above: their idle
+state reports trigger the current plugin's automatic opening.
 
 ## TODO
 
