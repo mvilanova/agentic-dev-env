@@ -17,7 +17,7 @@ index 1c8b5b8..276e59b 100644
 @@ -76,6 +76,20 @@ describe("HerdrAdapter", () => {
      expect(calls[0][idx + 1]).toBe("tab");
    });
- 
+
 +  it("opens splits below the agent without stealing focus, leaving tabs alone", () => {
 +    const calls: string[][] = [];
 +    const herdr = new HerdrAdapter("herdr", (args) => {
