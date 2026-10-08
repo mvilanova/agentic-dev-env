@@ -171,6 +171,60 @@ Codex only has the `SessionStart` hook integration above, not the skill.
   from the `herdrdev/herdr` GitHub repo directly into the agent's own
   instructions/skills mechanism.
 
+### Herdr workflows
+
+#### Review before committing
+
+Ask the primary agent:
+
+> Use Herdr to start a reviewer in a sibling pane without changing focus.
+> If you are Codex, start Claude with Opus 5.5 at high effort
+> (`--kind claude -- --model claude-opus-5-5 --effort high`); if you are Claude,
+> start Codex with Sol 6.1 at high effort
+> (`--kind codex -- -m gpt-6.1-sol -c model_reasoning_effort=high`).
+> Review this task's diff for correctness, regressions, and missed callers.
+> Do not edit files. Collect its findings, resolve confirmed issues, run the
+> appropriate checks, and report the result.
+
+To submit this request with `prefix+shift+r`, add the following to
+`~/.config/herdr/config.toml`, then choose **reload config** in Herdr's
+global menu. Focus the primary agent before pressing the shortcut.
+
+```toml
+[[keys.command]]
+key = "prefix+shift+r"
+type = "shell"
+description = "ask agent to coordinate a review"
+command = """
+"$HERDR_BIN_PATH" agent prompt "$HERDR_ACTIVE_PANE_ID" \
+"Use Herdr to start a reviewer in a sibling pane without changing focus. If you are Codex, start Claude with Opus 5.5 at high effort (--kind claude -- --model claude-opus-5-5 --effort high); if you are Claude, start Codex with Sol 6.1 at high effort (--kind codex -- -m gpt-6.1-sol -c model_reasoning_effort=high). Review this task's diff for correctness, regressions, and missed callers. Do not edit files. Collect its findings, resolve confirmed issues, run the appropriate checks, and report the result."
+"""
+```
+
+The underlying sequence requires `jq` and the selected review CLI:
+
+```sh
+# Run from inside a Herdr pane.
+test "${HERDR_ENV:-}" = 1 || exit 1
+
+created=$(herdr pane split --current --direction right --cwd "$PWD" --no-focus) || exit
+pane_id=$(printf '%s\n' "$created" | jq -er '.result.pane.pane_id') || exit
+
+# Codex primary: start a Claude reviewer.
+herdr agent start reviewer --kind claude --pane "$pane_id" -- --model claude-opus-5-5 --effort high || exit
+# For a Claude primary, replace the preceding command with:
+# herdr agent start reviewer --kind codex --pane "$pane_id" -- -m gpt-6.1-sol -c model_reasoning_effort=high || exit
+herdr agent prompt reviewer \
+  "Review the current diff for correctness and regressions. Trace affected callers. Do not edit files. Report actionable findings with file locations." \
+  --wait --timeout 120000 || exit
+herdr agent read reviewer --source recent-unwrapped --lines 160
+```
+
+This follows Herdr's [helper-agent recipe](https://herdr.dev/docs/agent-automation/#recipes).
+In repeated automation, use unique names so an existing `reviewer` doesn't
+collide. If the wait times out, inspect the reviewer before retrying; the
+prompt may already have been delivered.
+
 ## Hunk
 
 https://www.hunk.dev/ — review-first terminal diff viewer for
