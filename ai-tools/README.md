@@ -367,6 +367,117 @@ have been uninstalled. Their installation instructions and shortcuts are
 removed from this guide. Keep Herdr's agent integrations above: their idle
 state reports trigger the current plugin's automatic opening.
 
+## OpenRig
+
+https://openrig.dev/ — self-hosted multi-agent harness. Runs a persistent
+team of coding agents (Claude Code, Codex, Pi) as tmux sessions on this
+machine: one lead agent takes a goal and delegates to specialist seats
+that own work, keep a queue, and message each other. Apache-2.0,
+[mvschwarz/openrig](https://github.com/mvschwarz/openrig). Background on
+where it sits among factory tools is in
+[`../research/agentic-software-factories-landscape.md`](../research/agentic-software-factories-landscape.md).
+
+What it does not do: no event triggers (issues, Slack), no sandboxes, no
+review or merge gates. Gates live in the target repo (hooks, lint,
+tests, `AGENTS.md`) and a human reviews the PR.
+
+### Install
+
+Prerequisites: Node 22 or 24 (the guide says 22 on Apple silicon; 24
+worked here), tmux, and signed-in Claude Code and/or Codex.
+
+```sh
+npm install -g @openrig/cli
+rig setup --dry-run
+rig setup --no-herdr
+claude auth status && codex login status
+rig daemon start
+rig status
+```
+
+`rig setup` installs tmux via Homebrew if missing and writes an
+OpenRig-managed block into `~/.tmux.conf`. It also installs Herdr unless
+`--no-herdr` is passed; Herdr is already installed per the section above,
+so pass the flag.
+
+Permissions default to Claude Code `acceptEdits` and Codex
+`workspace-write`, so seats still prompt for shell commands. Leave this on
+for a first run. `rig policy apply yolo --spec <rig.yaml>` passes
+`--dangerously-skip-permissions` on the next launch; use it only in a
+throwaway worktree.
+
+### Launch a team
+
+The shipped `starter` team has two seats, `dev-build@starter` (lead) and
+`dev-review@starter`, and needs both Claude Code and Codex logins. With
+one provider, ask the operator to write an adapted copy.
+
+```sh
+cd <repo>
+rig specs preview starter --kind rig
+rig up starter --cwd . --plan
+rig up starter --cwd .
+rig ps --nodes --rig starter     # ready when both seats report ready
+rig tui                          # dashboard, q to leave
+```
+
+`Status: partial` means a seat is waiting on a permission prompt. Answer
+it in that seat's terminal, then run the `rig seat continue <seat>`
+command it prints.
+
+### Send work
+
+```sh
+rig send dev-build@starter 'Read .openrig/factory/BRIEF.md and implement it.'
+rig send dev-review@starter 'Run the app and list every unreadable element.'
+```
+
+Queue owned work instead of chatting when a task has a clear owner:
+
+```sh
+rig queue create --id theme-001 --destination dev-design@starter \
+  --body-file .openrig/factory/BRIEF.md \
+  --summary 'Theme tokens and dark variant'
+rig queue show theme-001 --full      # from the receiving seat
+rig queue claim theme-001
+rig queue handoff theme-001 --to dev-qa@starter --body-file REVIEW.md
+```
+
+Grow the `dev` pod when the lead stalls:
+
+```sh
+RIG_ID=$(rig ps --json | jq -r '.[] | select(.name=="starter") | .id')
+rig grow "$RIG_ID" design qa --pod dev --runtime claude-code --cwd "$PWD"
+```
+
+### Tear down
+
+```sh
+rig down starter
+rig down kernel      # only if the operator and advisor should stop too
+rig daemon stop
+```
+
+### Worked example: Tempo dark mode
+
+First trial, on the Tempo web app (React 19, Tailwind 4, Vite in
+`tempo-ai/frontend`). Dark mode is bounded: a `dark` variant, a toggle,
+and a sweep of hard-coded colors.
+
+1. Branch so agents cannot touch `main`: `git checkout -b feat/dark-mode`.
+2. Write the brief to `.openrig/factory/BRIEF.md` in the Tempo repo.
+   Template: [`openrig/BRIEF.example.md`](openrig/BRIEF.example.md). The
+   brief carries the goal, constraints and acceptance criteria; the repo's
+   `AGENTS.md`, lint and tests are the gates.
+3. `rig up starter --cwd .`, then
+   `rig send dev-build@starter 'Read .openrig/factory/BRIEF.md and implement it. Use dev-review@starter to test every screen in both themes before opening the PR.'`
+4. Watch in `rig tui`; grow with `design` and `qa` seats if the lead asks.
+5. Review the PR by hand (OpenRig has no merge gate), then `rig down starter`.
+
+The iOS app already handles `colorScheme` in the calendar card views, so a
+dark-mode task there is an audit, and the brief would need build and
+simulator-screenshot steps.
+
 ## TODO
 
 - [ ] Document Codex CLI / Pi config once customized (currently defaults)
