@@ -41,6 +41,14 @@ brew install --cask codex
 codex auth
 ```
 
+### Shared PR completion instructions
+
+Add the rule in [`PR-INSTRUCTIONS.md`](PR-INSTRUCTIONS.md) to both harnesses'
+global instruction files: `~/.codex/AGENTS.md` and `~/.claude/CLAUDE.md`.
+Preserve any existing instructions. This makes monitoring the latest commit's
+CI checks and fixing failures caused by the change part of PR completion.
+Start a new conversation after updating the files.
+
 ### Pi (Earendil Works)
 
 Provider-agnostic — works with Anthropic, OpenAI, Gemini, and others. No
