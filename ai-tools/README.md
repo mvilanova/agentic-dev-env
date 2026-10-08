@@ -482,6 +482,10 @@ simulator-screenshot steps.
 
 - [ ] Document Codex CLI / Pi config once customized (currently defaults)
 - [ ] Document Cursor setup (present on this machine, not yet written up)
-- [ ] Document shared MCP servers, if any
 - [ ] Decide whether to actually configure hunk as git pager/difftool, or
       leave it available but unconfigured
+
+## Developer resources
+
+- [Context7](https://context7.com/) — current library documentation for AI coding assistants.
+- [Exa](https://exa.ai/) — web search for AI applications and agents.
