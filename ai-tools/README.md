@@ -113,6 +113,77 @@ to turn it off for the conversation. See the
 [upstream commands](https://github.com/DietrichGebert/ponytail#commands)
 for review, audit, and other skills.
 
+## agent-browser
+
+[agent-browser](https://agent-browser.dev/) — browser automation CLI for
+AI agents. It returns compact accessibility snapshots with element refs
+that agents can use to navigate, click, fill forms, and take screenshots.
+Works with any harness that can run shell commands.
+
+### Install
+
+On macOS, use Homebrew, then download Chrome separately:
+
+```sh
+brew install agent-browser
+agent-browser install
+agent-browser --version
+```
+
+Homebrew installs the CLI; `agent-browser install` downloads the browser
+needed to run it. On this machine, the 2026-10-09 install used CLI 0.38.2
+and Chrome 155.0.8059.39 under
+`~/.agent-browser/browsers/chrome-155.0.8059.39`. Versions and the download
+directory change with updates. See the
+[installation guide](https://agent-browser.dev/installation).
+
+### Agent skill (optional)
+
+Install the upstream discovery skill globally for Codex, Claude Code,
+and Pi:
+
+```sh
+npx skills add vercel-labs/agent-browser -g -a codex claude-code pi -y
+```
+
+Confirmed on this machine: the skill lives in
+`~/.agents/skills/agent-browser`, shared by Codex and Pi; Claude Code gets
+a symlink. For all supported harnesses, use
+`npx skills add vercel-labs/agent-browser -g --all` instead. See the
+[installer options](https://github.com/vercel-labs/skills#options).
+
+Requires Node.js/npm from the [shell setup](../shell/README.md#setup).
+The skill points agents to instructions bundled with their CLI version:
+
+```sh
+agent-browser skills list
+agent-browser skills get core --full
+```
+
+See the [skills guide](https://agent-browser.dev/skills). The CLI also
+works without the skill: ask your agent to use `agent-browser` and consult
+`agent-browser --help`.
+
+### Usage
+
+```sh
+agent-browser open https://example.com
+agent-browser snapshot -i
+# Read the snapshot and replace @e2 with the desired element's ref.
+agent-browser click @e2
+agent-browser snapshot -i
+agent-browser screenshot /tmp/agent-browser-page.png
+agent-browser close
+```
+
+`snapshot -i` lists interactive elements. Use the refs from the latest
+snapshot; take a new snapshot after navigation or changes to the page.
+For inputs, use `agent-browser fill @e3 "text"` with the input's actual
+ref. Commands share a browser through a background daemon until closed.
+Add `--headed` to the initial `open` command to show the browser window.
+See the [quick start](https://agent-browser.dev/quick-start) and
+[command reference](https://agent-browser.dev/commands).
+
 ## Herdr
 
 https://herdr.dev/ — agent runtime / terminal-session manager.

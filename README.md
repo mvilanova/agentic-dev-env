@@ -9,14 +9,14 @@ Goal: if I get a new machine, this repo is enough to rebuild the setup.
 
 - [`BOOTSTRAP.md`](BOOTSTRAP.md) — first steps on a new machine, in order
   (Homebrew, Oh My Zsh, Vim, Nerd Fonts, Starship, terminal, herdr, agent
-  harnesses, hunk, CaskHub, direnv)
+  harnesses, agent-browser, hunk, CaskHub, direnv)
 - [`shell/`](shell/) — shell (zsh/bash) config and aliases
 - [`vim/`](vim/) — Vim config and plugins
 - [`git/`](git/) — git and GitHub CLI config
 - [`terminal/`](terminal/) — terminal emulator setup
 - [`research/`](research/) — research notes on agentic engineering tooling
 - [`ai-tools/`](ai-tools/) — AI coding tools (agent harnesses, Ponytail,
-  herdr, hunk, OpenRig)
+  agent-browser, herdr, hunk, OpenRig)
   and how they're configured; Claude Code's config lives in
   [`ai-tools/claude-code/`](ai-tools/claude-code/)
 
