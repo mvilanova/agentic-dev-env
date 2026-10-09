@@ -166,6 +166,16 @@ After installing the harnesses, install the
 Pi. Follow the per-harness commands there, including the Node.js
 prerequisite and Codex hook setup.
 
+For browser automation, install agent-browser and its Chrome download:
+
+```sh
+brew install agent-browser
+agent-browser install
+```
+
+See [agent-browser setup and usage](ai-tools/README.md#agent-browser),
+including the optional agent skill.
+
 ## 8. Hunk (diff review)
 
 https://www.hunk.dev/ — review-first terminal diff viewer for
