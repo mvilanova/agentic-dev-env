@@ -71,6 +71,7 @@ https://starship.rs/guide/
 
 ```sh
 brew install starship
+mkdir ~/.config
 starship preset gruvbox-rainbow -o ~/.config/starship.toml
 ```
 
