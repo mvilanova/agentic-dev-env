@@ -56,6 +56,7 @@ See [`vim/README.md`](vim/README.md) for vim-plug setup and config.
 https://www.nerdfonts.com/
 
 ```sh
+brew install --cask font-meslo-lg-nerd-font
 brew install --cask font-meslo-lgs-nerd-font
 brew install --cask font-jetbrains-mono-nerd-font
 ```
