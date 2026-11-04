@@ -16,6 +16,8 @@ if [ -z "$title" ] && [ -f "$tp" ]; then
   title=$(grep -F "\"type\":\"custom-title\"" "$tp" | tail -1 | jq -r ".customTitle // empty" 2>/dev/null)
   [ -z "$title" ] && title=$(grep -F "\"type\":\"ai-title\"" "$tp" | tail -1 | jq -r ".aiTitle // empty" 2>/dev/null)
 fi
+# Free text from the transcript: drop control characters so no stray escape sequence reaches the terminal.
+title=$(printf '%s' "$title" | tr -d '\000-\037\177')
 
 branch=""; repo=""; pr=""; pr_url=""
 if [ -n "$cwd" ] && common=$(git -C "$cwd" --no-optional-locks rev-parse --path-format=absolute --git-common-dir 2>/dev/null); then
