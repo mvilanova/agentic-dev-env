@@ -27,5 +27,9 @@
   },
   "autoCompactWindow": 272000,
   "tui": "fullscreen",
-  "agentPushNotifEnabled": true
+  "agentPushNotifEnabled": true,
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline.sh"
+  }
 }
